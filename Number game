@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Number Guessing Game</h1>
+  <p>Set the range for the number (min and max):</p>
+  <input type="number" id="minRange" placeholder="Minimum">
+  <input type="number" id="maxRange" placeholder="Maximum">
+  <button onclick="startGame()">Start Game</button>
+  <p>Guess a number:</p>
+  <input type="number" id="guessInput">
+  <button onclick="checkGuess()">Submit Guess</button>
+  <p id="message"></p>
+  <p>Attempts: <span id="attemptCount">0</span></p>
+  <p>Score: <span id="score">0</span></p>
+
+  <script>
+    let minNumber;
+    let maxNumber;
+    let randomNumber;
+    let attempts = 0;
+    let score = 0;
+
+    function startGame() {
+      minNumber = parseInt(document.getElementById('minRange').value);
+      maxNumber = parseInt(document.getElementById('maxRange').value);
+
+      if (isNaN(minNumber) || isNaN(maxNumber)) {
+        alert('Please enter valid minimum and maximum numbers.');
+        return;
+      }
+
+      if (minNumber >= maxNumber) {
+        alert('Maximum number must be greater than minimum number.');
+        return;
+      }
+
+      randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1)) + minNumber;
+      attempts = 0;
+      score = 0;
+      document.getElementById('attemptCount').textContent = attempts;
+      document.getElementById('score').textContent = score;
+      document.getElementById('message').textContent = '';
+      document.getElementById('guessInput').value = '';
+    }
+
+    function checkGuess() {
+      const userGuess = parseInt(document.getElementById('guessInput').value);
+      attempts++;
+
+      if (isNaN(userGuess) || userGuess < minNumber || userGuess > maxNumber) {
+        document.getElementById('message').textContent = 'Please enter a valid number within the range.';
+        return;
+      }
+
+      if (userGuess === randomNumber) {
+        document.getElementById('message').textContent = `Congratulations! You guessed the correct number in ${attempts} attempts.`;
+        score += 10 * Math.floor(maxNumber / (attempts + 1));
+        document.getElementById('score').textContent = score;
+      } else if (userGuess < randomNumber) {
+        document.getElementById('message').textContent = 'Too low! Try again.';
+      } else {
+        document.getElementById('message').textContent = 'Too high! Try again.';
+      }
+
+      document.getElementById('attemptCount').textContent = attempts;
+    }
+  </script>
+</body>
+</html>
